@@ -1,4 +1,3 @@
-# gravitee docker-compose reference 
 version: '3.8'
 
 networks:
@@ -8,7 +7,7 @@ networks:
     name: storage
 
 volumes:
-  data-elasticsearch:
+  data-opensearch:
   data-mongo:
 
 services:
@@ -19,68 +18,49 @@ services:
     volumes:
       - data-mongo:/data/db
       - ./.logs/apim-mongodb:/var/log/mongodb
-    healthcheck:
-      test: mongosh --eval 'db.runCommand({serverStatus:1}).ok' --quiet | grep 1
-      interval: 5s
-      timeout: 3s
-      retries: 10
     networks:
       - storage
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-8.6.2}
-    container_name: gio_apim_elasticsearch
+  opensearch:
+    image: opensearchproject/opensearch:${OPENSEARCH_VERSION:-1.1.0}
+    container_name: gio_apim_opensearch
     restart: always
     volumes:
-      - data-elasticsearch:/usr/share/elasticsearch/data
+      - data-opensearch:/usr/share/opensearch/data
     environment:
       - http.host=0.0.0.0
       - transport.host=0.0.0.0
-      - xpack.security.enabled=false
-      - cluster.name=elasticsearch
+      - cluster.name=opensearch
       - bootstrap.memory_lock=true
       - discovery.type=single-node
+      - plugins.security.disabled=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
       nofile: 65536
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s" ]
-      interval: 5s
-      timeout: 3s
-      retries: 10
     networks:
       - storage
 
   gateway:
     image: ${APIM_REGISTRY:-graviteeio}/apim-gateway:${APIM_VERSION:-latest}
-    container_name: gio_apim_https_gateway
+    container_name: gio_apim_gateway
     restart: always
     ports:
       - "8082:8082"
     depends_on:
-      mongodb:
-        condition: service_healthy
-      elasticsearch:
-        condition: service_healthy
+      - mongodb
+      - opensearch
     volumes:
-      - ./.logs/apim-gateway-internal:/opt/graviteeio-gateway/logs
-      - ./.certificates:/opt/graviteeio-gateway/certificates
+      - ./.logs/apim-gateway:/opt/graviteeio-gateway/logs
       - ./.license:/opt/graviteeio-gateway/license
     environment:
       - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_ratelimit_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
-      - gravitee_reporters_elasticsearch_endpoints_0=http://elasticsearch:9200
-      - gravitee_http_secured=true
-      - gravitee_http_ssl_clientAuth=request
-      - gravitee_http_ssl_keystore_type=pkcs12
-      - gravitee_http_ssl_keystore_path=/opt/graviteeio-gateway/certificates/server.p12
-      - gravitee_http_ssl_keystore_password=server-secret
-      - gravitee_http_ssl_truststore_type=pkcs12
-      - gravitee_http_ssl_truststore_path=/opt/graviteeio-gateway/certificates/ca.p12
-      - gravitee_http_ssl_truststore_password=ca-secret
+      - gravitee_reporters_elasticsearch_endpoints_0=http://opensearch:9200
+      - gravitee_analytics_elasticsearch_security_username=admin
+      - gravitee_analytics_elasticsearch_security_password=admin
     networks:
       - storage
       - frontend
@@ -93,18 +73,18 @@ services:
       - "8083:8083"
     links:
       - mongodb
-      - elasticsearch
+      - opensearch
     depends_on:
-      mongodb:
-        condition: service_healthy
-      elasticsearch:
-        condition: service_healthy
+      - mongodb
+      - opensearch
     volumes:
       - ./.logs/apim-management-api:/opt/graviteeio-management-api/logs
       - ./.license:/opt/graviteeio-management-api/license
     environment:
       - gravitee_management_mongodb_uri=mongodb://mongodb:27017/gravitee?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
-      - gravitee_analytics_elasticsearch_endpoints_0=http://elasticsearch:9200
+      - gravitee_analytics_elasticsearch_endpoints_0=http://opensearch:9200
+      - gravitee_analytics_elasticsearch_security_username=admin
+      - gravitee_analytics_elasticsearch_security_password=admin
     networks:
       - storage
       - frontend
@@ -136,5 +116,14 @@ services:
       - PORTAL_API_URL=http://localhost:8083/portal
     volumes:
       - ./.logs/apim-portal-ui:/var/log/nginx
+    networks:
+      - frontend
+
+  echo_service:
+    image: hashicorp/http-echo
+    container_name: echo_service
+    ports:
+      - "5678:5678"
+    command: "-text='Hello from Echo Service'"
     networks:
       - frontend
