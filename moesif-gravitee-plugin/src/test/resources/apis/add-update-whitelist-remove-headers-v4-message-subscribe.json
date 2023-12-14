@@ -74,7 +74,7 @@
                     "name": "Transform Headers",
                     "description": "Transform Headers on request",
                     "enabled": true,
-                    "policy": "transform-headers",
+                    "policy": "moesif-gravitee-plugin",
                     "configuration": {
                         "addHeaders": [
                             {

@@ -26,7 +26,7 @@ public class MoesifPolicy extends MoesifPolicyV3 implements Policy {
 
     @Override
     public String id() {
-        return "transform-headers";
+        return "moesif-gravitee-plugin";
     }
 
     @Override
