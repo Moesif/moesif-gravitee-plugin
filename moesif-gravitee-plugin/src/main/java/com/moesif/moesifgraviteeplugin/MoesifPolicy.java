@@ -1,27 +1,37 @@
 package com.moesif.moesifgraviteeplugin;
 
+import com.moesif.api.models.EventRequestModel;
 import com.moesif.moesifgraviteeplugin.configuration.MoesifPolicyConfiguration;
 import com.moesif.moesifgraviteeplugin.v3.MoesifPolicyV3;
 import io.gravitee.el.TemplateEngine;
+import io.gravitee.gateway.api.Request;
 import io.gravitee.gateway.api.http.HttpHeaders;
 import io.gravitee.gateway.reactive.api.ExecutionFailure;
 import io.gravitee.gateway.reactive.api.context.HttpExecutionContext;
+import io.gravitee.gateway.reactive.api.context.HttpRequest;
 import io.gravitee.gateway.reactive.api.context.MessageExecutionContext;
 import io.gravitee.gateway.reactive.api.message.Message;
 import io.gravitee.gateway.reactive.api.policy.Policy;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
+@Slf4j
 public class MoesifPolicy extends MoesifPolicyV3 implements Policy {
 
     private static final String TRANSFORM_HEADERS_FAILURE = "TRANSFORM_HEADERS_FAILURE";
 
     public MoesifPolicy(final MoesifPolicyConfiguration configuration) {
         super(configuration);
+        log.error("MoesifPolicy constructor");
     }
 
     @Override
@@ -31,12 +41,37 @@ public class MoesifPolicy extends MoesifPolicyV3 implements Policy {
 
     @Override
     public Completable onRequest(HttpExecutionContext ctx) {
-        return Completable.defer(() -> transform(ctx, ctx.request().headers()));
+        HttpRequest request = ctx.request();
+        return Completable.defer(() -> {
+            log.info("Transforming request headers");
+            return transform(ctx, ctx.request().headers());
+        });
     }
 
     @Override
     public Completable onResponse(HttpExecutionContext ctx) {
-        return Completable.defer(() -> transform(ctx, ctx.response().headers()));
+        return Completable.defer(() -> {
+            log.info("Transforming response headers");
+            return transform(ctx, ctx.response().headers());
+        });
+    }
+
+    private EventRequestModel eventRequestFromHttpExecutionContext(final HttpExecutionContext ctx) {
+        HttpRequest request = ctx.request();
+        EventRequestModel eventRequestModel = new EventRequestModel();
+        eventRequestModel.setUri(request.uri());
+        eventRequestModel.setVerb(request.method().name());
+        eventRequestModel.setTime(Date.from(Instant.now()));
+        eventRequestModel.setIpAddress(request.remoteAddress());
+        request.headers().forEach(header -> {
+            eventRequestModel.getHeaders().put(header.getKey(), header.getValue());
+            if (header.getKey().equalsIgnoreCase("transfer-encoding")) {
+                eventRequestModel.setTransferEncoding(header.getValue());
+            }
+        });
+        // TODO: check best pattern to get body
+        eventRequestModel.setBody(request.bodyOrEmpty().blockingGet().toString());
+        return eventRequestModel;
     }
 
     private Completable transform(final HttpExecutionContext ctx, final HttpHeaders httpHeaders) {
@@ -44,26 +79,6 @@ public class MoesifPolicy extends MoesifPolicyV3 implements Policy {
             .onErrorResumeWith(
                 ctx.interruptWith(
                     new ExecutionFailure(500).key(TRANSFORM_HEADERS_FAILURE).message("Unable to apply headers transformation")
-                )
-            );
-    }
-
-    @Override
-    public Completable onMessageRequest(MessageExecutionContext ctx) {
-        return ctx.request().onMessage(message -> transformMessageHeaders(ctx, message));
-    }
-
-    @Override
-    public Completable onMessageResponse(MessageExecutionContext ctx) {
-        return ctx.response().onMessage(message -> transformMessageHeaders(ctx, message));
-    }
-
-    private Maybe<Message> transformMessageHeaders(final MessageExecutionContext ctx, final Message message) {
-        return transformHeaders(ctx.getTemplateEngine(message), message.headers())
-            .andThen(Maybe.just(message))
-            .onErrorResumeWith(
-                ctx.interruptMessageWith(
-                    new ExecutionFailure(500).key(TRANSFORM_HEADERS_FAILURE).message("Unable to apply headers transformation on message")
                 )
             );
     }
@@ -81,6 +96,7 @@ public class MoesifPolicy extends MoesifPolicyV3 implements Policy {
             )
             .andThen(
                 Completable.fromRunnable(() -> {
+                    log.error("Transforming headers");
                     // verify the whitelist
                     List<String> headersToRemove = configuration.getRemoveHeaders() == null
                         ? new ArrayList<>()

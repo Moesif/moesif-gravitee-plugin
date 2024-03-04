@@ -1,5 +1,6 @@
 package com.moesif.moesifgraviteeplugin.v3;
 
+import com.moesif.api.models.EventResponseModel;
 import com.moesif.moesifgraviteeplugin.configuration.MoesifPolicyConfiguration;
 import com.moesif.moesifgraviteeplugin.configuration.PolicyScope;
 import io.gravitee.gateway.api.ExecutionContext;
@@ -22,7 +23,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static io.gravitee.gateway.api.ExecutionContext.ATTR_API;
@@ -32,12 +35,8 @@ import static io.gravitee.gateway.api.ExecutionContext.ATTR_API;
 public class MoesifPolicyV3 {
 
     protected static final String ERROR_MESSAGE_FORMAT = "[api-id:%s] [request-id:%s] [request-path:%s] %s";
-    private static final String REQUEST_TEMPLATE_VARIABLE = "request";
-    private static final String RESPONSE_TEMPLATE_VARIABLE = "response";
 
-    /**
-     * Transform headers configuration
-     */
+
     protected final MoesifPolicyConfiguration configuration;
 
     @OnRequest
@@ -64,6 +63,7 @@ public class MoesifPolicyV3 {
 
     @OnRequestContent
     public ReadWriteStream<Buffer> onRequestContent(ExecutionContext executionContext) {
+        log.error("MoesifPolicy onRequestContent");
         if (configuration.getScope() == PolicyScope.REQUEST_CONTENT) {
             return createStream(PolicyScope.REQUEST_CONTENT, executionContext);
         }
@@ -73,6 +73,7 @@ public class MoesifPolicyV3 {
 
     @OnResponseContent
     public ReadWriteStream<Buffer> onResponseContent(ExecutionContext executionContext) {
+        log.error("MoesifPolicy onResponseContent");
         if (configuration.getScope() == PolicyScope.RESPONSE_CONTENT) {
             return createStream(PolicyScope.RESPONSE_CONTENT, executionContext);
         }
@@ -112,7 +113,18 @@ public class MoesifPolicyV3 {
         };
     }
 
+    private EventResponseModel eventResponseFromExecutionContext(final ExecutionContext ctx, String content) {
+        Response response = ctx.response();
+        EventResponseModel eventResponseModel = new EventResponseModel();
+        eventResponseModel.setTime(Date.from(Instant.now()));
+        eventResponseModel.setStatus(response.status());
+        eventResponseModel.setHeaders(response.headers().toSingleValueMap());
+        eventResponseModel.setBody(content);
+        return eventResponseModel;
+    }
+
     private void initRequestResponseProperties(ExecutionContext context, String requestContent, String responseContent) {
+        log.error("MoesifPolicy initRequestResponseProperties");
         context
             .getTemplateEngine()
             .getTemplateContext()
