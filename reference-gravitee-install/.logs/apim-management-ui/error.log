@@ -1,0 +1,30 @@
+2024/05/17 00:14:08 [notice] 1#1: using the "epoll" event method
+2024/05/17 00:14:08 [notice] 1#1: nginx/1.25.3
+2024/05/17 00:14:08 [notice] 1#1: built by gcc 12.2.1 20220924 (Alpine 12.2.1_git20220924-r10) 
+2024/05/17 00:14:08 [notice] 1#1: OS: Linux 6.8.9-arch1-2
+2024/05/17 00:14:08 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1073741816:1073741816
+2024/05/17 00:14:08 [notice] 1#1: start worker processes
+2024/05/17 00:14:08 [notice] 1#1: start worker process 12
+2024/05/17 00:14:08 [notice] 1#1: start worker process 13
+2024/05/17 00:14:08 [notice] 1#1: start worker process 14
+2024/05/17 00:14:08 [notice] 1#1: start worker process 15
+2024/05/17 00:14:08 [notice] 1#1: start worker process 16
+2024/05/17 00:14:08 [notice] 1#1: start worker process 17
+2024/05/17 00:14:08 [notice] 1#1: start worker process 18
+2024/05/17 00:14:08 [notice] 1#1: start worker process 19
+2024/05/17 00:14:08 [notice] 1#1: start worker process 20
+2024/05/17 00:14:08 [notice] 1#1: start worker process 21
+2024/05/17 00:14:08 [notice] 1#1: start worker process 22
+2024/05/17 00:14:08 [notice] 1#1: start worker process 23
+2024/05/17 00:14:08 [notice] 1#1: start worker process 24
+2024/05/17 00:14:08 [notice] 1#1: start worker process 25
+2024/05/17 00:14:08 [notice] 1#1: start worker process 26
+2024/05/17 00:14:08 [notice] 1#1: start worker process 27
+2024/05/17 00:14:08 [notice] 1#1: start worker process 28
+2024/05/17 00:14:08 [notice] 1#1: start worker process 29
+2024/05/17 00:14:08 [notice] 1#1: start worker process 30
+2024/05/17 00:14:08 [notice] 1#1: start worker process 31
+2024/05/17 00:14:08 [notice] 1#1: start worker process 32
+2024/05/17 00:14:08 [notice] 1#1: start worker process 33
+2024/05/17 00:14:08 [notice] 1#1: start worker process 34
+2024/05/17 00:14:08 [notice] 1#1: start worker process 35
