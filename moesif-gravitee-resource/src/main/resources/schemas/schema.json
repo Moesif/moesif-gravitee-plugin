@@ -1,0 +1,28 @@
+{
+    "type": "object",
+    "id": "urn:jsonschema:com:moesif:gravitee:resource:MoesifResourceConfiguration",
+    "properties": {
+        "baseUrl": {
+            "type": "string"
+        },
+        "apiToken": {
+            "type": "string"
+        },
+        "batchSize": {
+            "type": "integer"
+        },
+        "batchWaitTime": {
+            "type": "integer"
+        },
+        "queueSize": {
+            "type": "integer"
+        },
+        "concurrency": {
+            "type": "integer"
+        },
+        "debug": {
+            "type": "boolean"
+        }
+    },
+    "required": ["apiToken"]
+}

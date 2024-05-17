@@ -1,0 +1,3 @@
+= Moesif Resource
+
+This is the Moesif API resource. It is used to interact with the Moesif API.
