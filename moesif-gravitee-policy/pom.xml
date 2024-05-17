@@ -23,7 +23,7 @@
 
     <groupId>com.moesif</groupId>
     <artifactId>graviteepolicy</artifactId>
-    <version>1.08-SNAPSHOT</version>
+    <version>1.1</version>
 
     <name>Moesif API Plugin for Gravitee.io APIM - Policy</name>
     <description>Integrate with Moesif API</description>
