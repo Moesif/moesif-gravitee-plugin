@@ -22,7 +22,7 @@ import lombok.Data;
 @Data
 public class MoesifResourceConfiguration implements ResourceConfiguration {
 
-    private String baseUrl = "https://api-dev.moesif.net";
+    private String baseUrl = "https://api.moesif.net";
     private String apiToken;
     private int batchSize = 100;
     private int batchWaitTime = 2000;
