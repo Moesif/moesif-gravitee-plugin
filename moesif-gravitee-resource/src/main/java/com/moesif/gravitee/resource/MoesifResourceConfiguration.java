@@ -25,7 +25,7 @@ public class MoesifResourceConfiguration implements ResourceConfiguration {
     private String baseUrl = "https://api.moesif.net";
     private String apiToken;
     private int batchSize = 100;
-    private int batchWaitTime = 2000;
+    private int batchWaitTime = 1000;
     private int queueSize = 100000;
     private int concurrency = 1;
     private boolean debug = false;

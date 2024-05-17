@@ -73,19 +73,19 @@ public class MoesifResourceEventSender extends MoesifResource<MoesifResourceConf
 
         @Override
         public void run() {
-            if (eventQueue.isEmpty()) {
-                return;
-            }
+            while (!eventQueue.isEmpty()) {
+                List<EventModel> events = new ArrayList<>();
+                eventQueue.drainTo(events, configuration().getBatchSize());
 
-            List<EventModel> events = new ArrayList<>();
-            eventQueue.drainTo(events, configuration().getBatchSize());
-
-            if (!events.isEmpty()) {
-                try {
-                    client.getAPI().createEventsBatch(events);
-                    log.info("Sent {} events to Moesif", events.size());
-                } catch (Throwable e) {
-                    log.error("Failed to send events to Moesif", e);
+                if (!events.isEmpty()) {
+                    try {
+                        client.getAPI().createEventsBatch(events);
+                        log.info("Sent {} events to Moesif", events.size());
+                    } catch (Throwable e) {
+                        log.error("Failed to send events to Moesif", e);
+                    }
+                } else {
+                    break; // No more full batches available, wait for next timer tick
                 }
             }
         }
