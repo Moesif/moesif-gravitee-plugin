@@ -64,8 +64,16 @@ After copying the plugin files, restart the Management API and Gateway services 
    ![See Moesif Resource on API](.images/1_api_resources.png)
 2. **Configure Resource Settings**:
    - Name the resource `moesif-resource`
-   - Set Moesif Application ID (API access token). This is required. Other configuration settings are optional.
-   ![Moesif Resource Configuration](.images/2_create_resource.png)
+   - Set Moesif Application ID (API access token). This is required.
+   - Optional settings include:
+      - baseUrl (default: Moesif prod "https://api.moesif.net") This is only for development testing and should not be configured for production use.
+      - batchSize (default: 100) This is the maximum number of events to send in a batch.
+      - batchWaitTime (default: 1000 ms) This is the maximum time to wait before sending a batch of events in milliseconds.
+      - queueSize (default: 100000) This is the maximum number of events that can be queued in memory before dropping events.
+      - concurrency (default: 1) This will be configurable in the future but is hard-coded to 1 for initial release.
+      - debug (default: false) This enables very verbose logging of request and response payloads. This should not be enabled in production.
+
+![Moesif Resource Configuration](.images/2_create_resource.png)
 
 ### Step 6: Configure the Policy Plugin
 1. **Add the Policy to an API**:
