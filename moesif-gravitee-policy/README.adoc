@@ -1,0 +1,32 @@
+= Moesif Policy
+
+ifdef::env-github[]
+image:https://img.shields.io/static/v1?label=Available%20at&message=Gravitee.io&color=1EC9D2["Gravitee.io", link="https://download.gravitee.io/#graviteeio-apim/plugins/policies/gravitee-policy-custom-query-parameters-parser/"]
+image:https://img.shields.io/badge/License-Apache%202.0-blue.svg["License", link="https://github.com/gravitee-io/gravitee-policy-custom-query-parameters-parser/blob/master/LICENSE.txt"]
+image:https://img.shields.io/badge/semantic--release-conventional%20commits-e10079?logo=semantic-release["Releases", link="https://github.com/gravitee-io/gravitee-policy-custom-query-parameters-parser/releases"]
+endif::[]
+
+== Phase
+
+[cols="^2,^2,^2,^2",options="header"]
+|===
+|onRequest|onResponse|onRequestContent|onResponseContent
+
+|X
+|X
+|X
+|X
+
+|===
+
+== Description
+
+Log API requests and responses to Moesif.
+
+== Compatibility with APIM
+
+|===
+| Plugin version | APIM version
+
+| Up to 1.x         | 4.0.x to latest
+|===
