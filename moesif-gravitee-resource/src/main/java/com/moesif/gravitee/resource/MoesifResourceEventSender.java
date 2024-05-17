@@ -58,7 +58,6 @@ public class MoesifResourceEventSender extends MoesifResource<MoesifResourceConf
     public void sendEvent(EventModel event) {
         try {
             eventQueue.put(event);
-            log.info("Event queued for sending to Moesif: {}", event);
         } catch (InterruptedException e) {
             log.error("Failed to queue event", e);
         }

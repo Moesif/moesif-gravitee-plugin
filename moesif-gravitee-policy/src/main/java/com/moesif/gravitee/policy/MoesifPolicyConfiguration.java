@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 package com.moesif.gravitee.policy;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.gravitee.policy.api.PolicyConfiguration;
 
 public class MoesifPolicyConfiguration implements PolicyConfiguration {
-    public String userIdHeader;
-    public String companyIdHeader;
+
+  public String userIdHeader;
+  public String companyIdHeader;
 }
