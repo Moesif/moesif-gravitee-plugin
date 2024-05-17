@@ -15,7 +15,6 @@
  */
 package com.moesif.gravitee.resource;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.gravitee.resource.api.ResourceConfiguration;
 import lombok.Data;
 

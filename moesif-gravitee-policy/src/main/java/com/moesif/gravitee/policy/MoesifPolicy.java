@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MoesifPolicy implements Policy {
 
-  protected final MoesifPolicyConfiguration configuration;
+  private final MoesifPolicyConfiguration configuration;
 
   public MoesifPolicy(MoesifPolicyConfiguration configuration) {
     this.configuration = configuration;
@@ -57,17 +57,19 @@ public class MoesifPolicy implements Policy {
 
     eventModel.setRequest(eventRequestModel);
     if (
-      configuration.userIdHeader != null &&
-      request.headers().contains(configuration.userIdHeader)
+      configuration.getUserIdHeader() != null &&
+      request.headers().contains(configuration.getUserIdHeader())
     ) {
-      eventModel.setUserId(request.headers().get(configuration.userIdHeader));
+      eventModel.setUserId(
+        request.headers().get(configuration.getUserIdHeader())
+      );
     }
     if (
-      configuration.companyIdHeader != null &&
-      request.headers().contains(configuration.companyIdHeader)
+      configuration.getCompanyIdHeader() != null &&
+      request.headers().contains(configuration.getCompanyIdHeader())
     ) {
       eventModel.setCompanyId(
-        request.headers().get(configuration.companyIdHeader)
+        request.headers().get(configuration.getCompanyIdHeader())
       );
     }
     ctx.setAttribute("eventModel", eventModel);
@@ -76,7 +78,7 @@ public class MoesifPolicy implements Policy {
       .body()
       .doOnSuccess(buffer -> {
         String body = buffer.toString();
-        if (configuration().debug) log.info("Request Body: {}", body);
+        if (configuration.isDebug()) log.info("Request Body: {}", body);
         eventRequestModel.setBody(body);
       })
       .doOnError(error -> {
@@ -107,7 +109,7 @@ public class MoesifPolicy implements Policy {
       .body()
       .doOnSuccess(buffer -> {
         String body = buffer.toString();
-        if (configuration().debug) log.info("Response Body: {}", body);
+        if (configuration.isDebug()) log.info("Response Body: {}", body);
         eventResponseModel.setBody(body);
       })
       .doOnError(error -> {

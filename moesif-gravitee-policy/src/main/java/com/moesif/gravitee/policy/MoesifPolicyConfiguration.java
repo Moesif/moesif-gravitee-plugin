@@ -17,9 +17,12 @@ package com.moesif.gravitee.policy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.gravitee.policy.api.PolicyConfiguration;
+import lombok.Data;
 
+@Data
 public class MoesifPolicyConfiguration implements PolicyConfiguration {
 
-  public String userIdHeader;
-  public String companyIdHeader;
+  private String userIdHeader;
+  private String companyIdHeader;
+  private boolean debug = false;
 }
