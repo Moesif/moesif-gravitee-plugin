@@ -72,9 +72,11 @@ public class MoesifResourceEventSender extends MoesifResource<MoesifResourceConf
 
         @Override
         public void run() {
-            while (!eventQueue.isEmpty()) {
+            boolean continueProcessing;
+            do {
                 List<EventModel> events = new ArrayList<>();
                 eventQueue.drainTo(events, configuration().getBatchSize());
+                continueProcessing = (events.size() == configuration().getBatchSize());
 
                 if (!events.isEmpty()) {
                     try {
@@ -83,10 +85,8 @@ public class MoesifResourceEventSender extends MoesifResource<MoesifResourceConf
                     } catch (Throwable e) {
                         log.error("Failed to send events to Moesif", e);
                     }
-                } else {
-                    break; // No more full batches available, wait for next timer tick
                 }
-            }
+            } while (continueProcessing);
         }
     }
 }
