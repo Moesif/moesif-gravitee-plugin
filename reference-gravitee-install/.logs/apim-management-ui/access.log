@@ -1,8 +1,0 @@
-172.25.0.1 - - [17/May/2024:00:17:00 +0000] "GET / HTTP/1.1" 200 1681 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0" "-"
-172.25.0.1 - - [17/May/2024:00:17:01 +0000] "GET /constants.json HTTP/1.1" 200 84 "http://localhost:8084/" "Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0" "-"
-172.25.0.1 - - [17/May/2024:00:17:01 +0000] "GET /build.json HTTP/1.1" 304 0 "http://localhost:8084/" "Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0" "-"
-172.25.0.1 - - [17/May/2024:00:17:01 +0000] "GET /assets/gravitee_logo_anim.gif HTTP/1.1" 304 0 "http://localhost:8084/" "Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0" "-"
-172.25.0.1 - - [17/May/2024:00:17:01 +0000] "GET /themes/default-theme.json HTTP/1.1" 304 0 "http://localhost:8084/" "Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0" "-"
-172.25.0.1 - - [17/May/2024:00:17:03 +0000] "GET /icons/tools.svg HTTP/1.1" 200 8358 "http://localhost:8084/" "Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0" "-"
-172.25.0.1 - - [17/May/2024:00:17:03 +0000] "GET /icons/shopping.svg HTTP/1.1" 200 21575 "http://localhost:8084/" "Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0" "-"
-172.25.0.1 - - [17/May/2024:00:17:03 +0000] "GET /e37a39560d1bdd6e36f4767d3c9db402.woff2 HTTP/1.1" 200 29760 "http://localhost:8084/styles.css" "Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0" "-"
