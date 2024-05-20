@@ -61,7 +61,7 @@ After copying the plugin files, restart the Management API and Gateway services 
 1. **Add the Resource to an API**:
    - Navigate to the API's "Resources" tab in the Gravitee Management Console.
    - You should see the Moesif Resource plugin listed as an available resource. Add it to the API.
-   ![See Moesif Resource on API](.images/1_api_resources.png)
+   ![See Moesif Resource on API](https://www.moesif.com/docs/images/docs/integration/gravitee-plugin-1_api_resources.png)
 2. **Configure Resource Settings**:
    - Name the resource `moesif-resource`
    - Set Moesif Application ID (API access token). This is required.
@@ -73,7 +73,7 @@ After copying the plugin files, restart the Management API and Gateway services 
       - concurrency (default: 1) This will be configurable in the future but is hard-coded to 1 for initial release.
       - debug (default: false) This enables very verbose logging of request and response payloads. This should not be enabled in production.
 
-![Moesif Resource Configuration](.images/2_create_resource.png)
+![Moesif Resource Configuration](https://www.moesif.com/docs/images/docs/integration/gravitee-plugin-2_create_resource.png)
 
 ### Step 6: Configure the Policy Plugin
 1. **Add the Policy to an API**:
@@ -83,7 +83,7 @@ After copying the plugin files, restart the Management API and Gateway services 
    - Set the necessary configuration parameters for the Policy, such as event types to capture, logging levels, and any filters.
    - Configure the `userIdHeader` and `companyIdHeader` fields to specify which request headers to read in order to populate the user and company IDs in the Moesif API event.
 
-![Organization Policy](.images/3_organization_policy.png)
+![Organization Policy](https://www.moesif.com/docs/images/docs/integration/gravitee-plugin-3_organization_policy.png)
 
 ## Usage
 
