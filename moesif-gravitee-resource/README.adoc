@@ -1,3 +1,87 @@
 = Moesif Resource
 
-This is the Moesif API resource. It is used to interact with the Moesif API.
+
+== Description
+
+The Moesif Resource plugin is used to send API events from Gravitee.io to Moesif for advanced API analytics and monitoring. It supports efficient batched event propagation to ensure minimal impact on your API performance.
+
+== Configuration
+
+**Required Configuration** 
+
+- This resource requires your https://www.moesif.com account's Collector Application Id
+- The resource `name` config must be set as `moesif-resource`
+- You must also deploy the Moesif Policy to your APIM Gateway for your APIs' `onRequest` and `onResponse` flows.
+
+**Integration Guide**
+
+For detailed install & configuration guidance:
+ https://www.moesif.com/docs/server-integration/gravitee/
+
+
+This plugin resource can be configured with the following options:
+
+|===
+|Property |Required |Description |Type |Default
+
+.^|baseUrl
+^.^| 
+|The base URL for the Moesif API. This is for plugin development and should not be changed in production usage.
+^.^|string
+^.^|https://api.moesif.net
+
+.^|apiToken
+^.^|X
+|The Moesif Collector Application Id used for authentication. This is required.
+^.^|string
+^.^|-
+
+.^|batchSize
+^.^| 
+|The maximum number of events to send in a single batch to Moesif.
+^.^|integer
+^.^|100
+
+.^|batchWaitTime
+^.^| 
+|The wait time in milliseconds before sending the next batch of events.
+^.^|integer
+^.^|1000
+
+.^|queueSize
+^.^| 
+|The maximum number of events to hold in the queue before sending to Moesif.
+^.^|integer
+^.^|100000
+
+.^|concurrency
+^.^| 
+|The number of concurrent threads to use for sending events. This is hard-coded to 1 for initial release.
+^.^|integer
+^.^|1
+
+.^|debug
+^.^| 
+|Enable or disable debug logging.
+^.^|boolean
+^.^|false
+|===
+
+[source, json]
+.Configuration example
+----
+{
+    "name": "moesif-resource",
+    "type": "moesif-resource",
+    "enabled": true,
+    "configuration": {
+        "baseUrl": "https://api.moesif.net",
+        "apiToken": "YOUR_MOESIF_API_TOKEN",
+        "batchSize": 100,
+        "batchWaitTime": 1000,
+        "queueSize": 100000,
+        "concurrency": 1,
+        "debug": false
+    }
+}
+----
